@@ -9,13 +9,14 @@
 3. Try to locate the file and **cd** to the same directory in the terminal (see e.g. Appendix A in the book).
 
 4. Type the following command in the terminal window:
+```
 gcc intopt.c
-
-csharp
-Copy code
+```
 
 5. Run it with:
+```
 ./a.out
+```
 
 6. Next change your program to read two integer numbers from stdin. See first lecture.
 The numbers should be stored in two variables called **m** and **n**.
@@ -24,7 +25,9 @@ When you run your program, you need to hit the key called "return" or "enter" af
 7. Print their values using the formatting string **"m = %d, n = %d\n"**.
 
 8. To avoid typing so much, put your input in a file, called **i** and run with this command:
+```
 ./a.out < i
+```
 
 9. Now it is time to allocate memory for a linear program. 
 The easiest way to create the matrix is to use a double** pointer. 
@@ -34,6 +37,8 @@ But for lab 1, you don't have to understand anything about linear programs. It i
 See Appendix B, and use the following format for the input, where m is the number of constraints and n the number of decision variables.
 
 As you can see in the youtube clips, there is a vector with *n* c-coefficients, a matrix with *m* rows and *n* columns, and a vector with *m* b-values. The matrix and vectors should have elements of type **double**.
+
+```
 m n
 c_0 c_1 ... c_{n-1}
 a_00 a_01 ... a_{0,n-1}
@@ -41,13 +46,17 @@ a_10 a_11 ... a_{1,n-1}
 ...
 a_{m-1,0} a_{m_1,1} ... a_{m-1,n-1}
 b_0 b_1 ... b_{m-1}
+```
 
 Use the following input (from Appendix B):
+
+```
 2 2
 1 2
 -0.5 1
 3 1
 4 18
+```
 
 10. Print out the linear program to check that it is what you expect.
 
