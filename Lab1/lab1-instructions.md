@@ -40,22 +40,22 @@ As you can see in the youtube clips, there is a vector with *n* c-coefficients, 
 
 ```
 m n
-c_0 c_1 ... c_{n-1}
-a_00 a_01 ... a_{0,n-1}
-a_10 a_11 ... a_{1,n-1}
-...
+c_0 c_1             ... c_{n-1}
+a_00 a_01           ... a_{0,n-1}
+a_10 a_11           ... a_{1,n-1}
+                    ...
 a_{m-1,0} a_{m_1,1} ... a_{m-1,n-1}
-b_0 b_1 ... b_{m-1}
+b_0 b_1             ... b_{m-1}
 ```
 
 Use the following input (from Appendix B):
 
 ```
-2 2
-1 2
+  2  2
+  1  2
 -0.5 1
-3 1
-4 18
+  3  1
+  4  18
 ```
 
 10. Print out the linear program to check that it is what you expect.
