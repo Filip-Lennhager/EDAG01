@@ -20,35 +20,34 @@
 
 5. It is now time to use Valgrind to check that all memory allocated from the heap also is deallocated.
    Run your program with
+```
 valgrind ./a.out < i
+```
 
-css
-Copy code
 Valgrind will most likely complain about memory leaks due to not freeing everything allocated.
 
 Try to figure out what was not freed and modify your program accordingly.
 
 If that turns out to be complicated, use instead
+```
 valgrind --leak-check=full --show-reachable=yes ./a.out < i
-
-csharp
-Copy code
+```
 
 6. Now destroy your program by commenting out the first for-loop in the function **init**.
 If you allocated memory for the **var** array with **calloc**, then switch to **malloc**.
 
 The purpose is to see that Valgrind can warn you about using uninitialized memory.  Run with
+```
 valgrind ./a.out < i
+```
 
-vbnet
-Copy code
 Does Valgrind complain?
 
 We would like to know where that memory was allocated, and therefore run with
+```
 valgrind --track-origins=yes ./a.out < i
+```
 
-vbnet
-Copy code
 This collects more information and is slower but can be crucial.
 In **Section 6.9.1 memcheck / Reading uninitialized memory** (on page 228) you can see that Valgrind keeps track of individual bits in memory.
 
@@ -57,13 +56,13 @@ In **Section 6.9.1 memcheck / Reading uninitialized memory** (on page 228) you c
 Does Valgrind keep track of local variables?
 
 8. Now add the following to any function in your program:
+```
 int local_array[10];
 
 for (i = 0; i < 11; i += 1)
-local_array[i] = i;
+   local_array[i] = i;
+```
 
-sql
-Copy code
 Does Valgrind check index-out-of-bounds for local variables allocated on the stack?
 
 9. Repeat the last problem with a global array. What does Valgrind do?
