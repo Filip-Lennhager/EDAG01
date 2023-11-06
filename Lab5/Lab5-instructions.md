@@ -28,10 +28,9 @@
 ### Lab instructions
 
 1. Copy the following directory on power.cs.lth.se to your home directory on that machine:
+```
 /usr/local/cs/edag01/labs/lab5
-
-bash
-Copy code
+```
 
 2. There you can find the following script as the file **t**
 ```
@@ -44,13 +43,13 @@ gcc $FILE.c -fno-tree-vectorize -O3 -mcpu=power8 -fno-inline && \
 ```
 It can be used to compile a C file, making the trace and running the simulator.
 
-To analyze a file a.c, invoke the script with the parameter a, such as with ./t a.
+To analyze a file **a.c**, invoke the script with the parameter **a**, such as with **./t a**.
 
-It is easier to learn about the simulator if only simple instructions (no SIMD) are used so we compile with -fno-tree-vectorization.
+It is easier to learn about the simulator if only simple instructions (no SIMD) are used so we compile with *-fno-tree-vectorization*.
 
-Always tell valgrind in which function tracing should start as is done above with --fn-start=main (about 200,000 instructions are executed before main is reached with dynamic linking, and valgrind dislikes static linking).
+***Always*** tell valgrind in which function tracing should start as is done above with *--fn-start=main* (about 200,000 instructions are executed before *main* is reached with dynamic linking, and valgrind dislikes static linking).
 
-The number of instructions to collect can be specified with k, m, or g.
+The number of instructions to collect can be specified with *k, m,* or *g*.
 
 The simulator is called run_timer and takes the following parameters above:
 
@@ -64,15 +63,15 @@ The simulator is called run_timer and takes the following parameters above:
  - -b 1 begin visualization at instruction 1,
  - -e 2000 end visualization at instruction 2000 (which is more than enough).
 
-3. Next look at the program a.c. First make a rough guess how many clock cycles each iteration takes, and then use the simulator and scrollpv to check in the next few tasks.
+3. Next look at the program **a.c**. First make a rough guess how many clock cycles each iteration takes, and then use the simulator and scrollpv to check in the next few tasks.
 
-4. Create a trace file with ./t a
+4. Create a trace file with **./t a**
 
-5. Disassemble the a.out with the command objdump -d a.out > x
+5. Disassemble the **a.out** with the command **objdump -d a.out > x**
 
-6. Download the directory lab5 (at least the files x, a.config, a.pipe, and a.results).
+6. Download the directory **lab5** (at least the files **x, a.config, a.pipe**, and **a.results**).
 
-Open x in an editor and search for the instructions in the main-function. You can find them using the pattern:
+Open **x** in an editor and search for the instructions in the **main**-function. You can find them using the pattern:
 
 ```
 main>:
@@ -108,35 +107,35 @@ main>:
 
 The loop starts at **10000460** and ends at **10000474** so six instructions per iteration.
 
-8. Start scrollpv and in the upper left corner select the File menu and open the file a.pipe (you can have four different traces opened at a time).
+8. Start scrollpv and in the upper left corner select the **File** menu and open the file **a.pipe** (you can have four different traces opened at a time).
 
 9. You will see a matrix filled with dots and some characters. The X-axis is time or more exactly clock cycles and the Y-axis is instructions.
 
-In scrollpv and the column Mnemonic you should see the same instructions (except that lis and li are not seen since they are so called synthetic instructions and actually variants of or instructions).
+In scrollpv and the column **Mnemonic** you should see the same instructions (except that **lis** and **li** are not seen since they are so called synthetic instructions and actually variants of **or** instructions).
 
-You can also see that each store instruction stfdx appears twice and this is due to it is split into two internal operations: one for adding the registers to produce the data address and another for writing to memory.
+You can also see that each store instruction **stfdx** appears twice and this is due to it is split into two internal operations: one for adding the registers to produce the data address and another for writing to memory.
 
-In the matrix, you can see what happens to each instruction each clock cycle. You can see lots of D which mean the instruction is in one of the decode pipeline stages.
+In the matrix, you can see what happens to each instruction each clock cycle. You can see lots of **D** which mean the instruction is in one of the **decode** pipeline stages.
 
-You can also see that the floating point add fadd has many E which mean execute, i.e. a floating point unit is actually working on the instruction.
+You can also see that the floating point add **fadd** has many **E** which mean **execute**, i.e. a floating point unit is actually working on the instruction.
 
-In the Info bar the character is explained which you can see when you hover the mouse over a character (such as an E).
+In the **Info bar** the character is explained which you can see when you hover the mouse over a character (such as an **E**).
 
 When the mouse is in the matrix and you press the left mouse button, you will see a crosshair that you can move around and easier find the clock cycle (at the top of the window) when an event happened.
 
-Use it to find the clock cycle when the first load lfdx left the reorder buffer of the pipeline, i.e. completed, which is marked as a C (it does not matter much which event you look for but the last is easy to find).
+Use it to find the clock cycle when the first load **lfdx** left the reorder buffer of the pipeline, i.e. **completed**, which is marked as a **C** (it does not matter much which event you look for but the last is easy to find).
 
 Write down the cycle.
 
-Now calculate which internal operation the last floating point load instruction is (i.e. the Iop Id in the first column) using the number of iterations in the loop (see source code) and the number of internal operations in each iteration.
+Now calculate which internal operation the last floating point load instruction is (i.e. the **Iop Id** in the first column) using the number of iterations in the loop (see source code) and the number of internal operations in each iteration.
 
-Scroll down to this internal operation (i.e. instruction) and look a bit below to see that the main function is returning so that you know you found the last iteration (you should find the blr at address 1000047c --- blr means branch-to-contents-of link register).
+Scroll down to this internal operation (i.e. instruction) and look a bit below to see that the main function is returning so that you know you found the last iteration (you should find the **blr** at address **1000047c** --- blr means branch-to-contents-of link register).
 
 Find the clock cycle when the load in the last iteration completed and calculate the number of cycles per iteration.
 
-10. Now redo the same with the file b.c and explain why each iteration takes more clock cycles (not so easy as you might first think by counting the number of arithmetic operations in the source code, but not the least difficult).
+10. Now redo the same with the file **b.c** and explain why each iteration takes more clock cycles (not so easy as you might first think by counting the number of arithmetic operations in the source code, but not the least difficult).
 
-11. Now change the t script and use your intopt with the file in. Start tracing in pivot and view the result in scrollpv.
+11. Now change the t script and use your **intopt** with the file **in**. Start tracing in **pivot** and view the result in scrollpv.
 
 12. Look for the worst cases of pipeline stalls, i.e. red characters. Try to explain what they are caused by. This will differ between different programs, obviously, but the purposes are
 
