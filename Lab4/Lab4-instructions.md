@@ -15,51 +15,51 @@
    You will next use four different program for performance measurements.
 
 5. First type
+```
 operf -e CYCLES:100000:0:0:1 ./a.out < input
+```
 
-vbnet
-Copy code
 See page 220. Your program is run with hardware counters enabled which count the number of clock cycles.
 
 Use **opreport** and **opannotate** to figure out which functions take most of the time in your program.
 
 6. Next compile with
+```
 gcc -pg -g intopt.c
+```
 
-arduino
-Copy code
 and run your program. Then give the command
+```
 gprof -T a.out
+```
 
-vbnet
-Copy code
 What does the output mean and how can you use it to better understand your program?
 
 7. Next compile with
+```
 gcc -fprofile-arcs -ftest-coverage -g intopt.c
+```
 
-arduino
-Copy code
 and run your program again. Then give the command
+```
 gcov intopt.c
+```
 
-css
-Copy code
 This will create a file **intopt.c.gcov**. What does it contain how and can you use this information?
 
 To get even more detailed information about which cases in your program are most common, you can use
+```
 gcov -b intopt.c
+```
 
-vbnet
-Copy code
 What does it say?
 
 8. In addition to finding memory errors, Valgrind can also be useful when doing performance measurements. Valgrind is slower than the other tools due to it simulates the computer so use the small input, at least initially. Recompile with -O3 and give the command
-valgrind --tool=cachegrind --I1=65536,1,128 --D1=32768,2,128
---LL=1048576,8,128 ./a.out < i
+```
+valgrind --tool=cachegrind --I1=65536,1,128 --D1=32768,2,128 \
+> --LL=1048576,8,128 ./a.out < i
+```
 
-sql
-Copy code
 These options specify the cache parameters to match our POWER8 machine.
 
 How can you see how many instructions in total, load instructions, and store instructions are executed?
