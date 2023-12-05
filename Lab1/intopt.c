@@ -56,6 +56,11 @@ int main(int argc, char** argv)
     /*------------Printing-------------*/
     printInput(a,b,c,m,n);
     /* ---------------------------- */
+
+    /* Deallocating variables */
+    free(a);
+    free(b);
+    free(c);
         
     return 0;
 }
