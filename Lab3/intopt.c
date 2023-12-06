@@ -83,10 +83,13 @@ int main() {
 
     
     /*------------Printing-------------*/
-    printf("\nresult: %0.3lf",simplex(m, n, a, b, c, x, y));
+    printf("\nresult: %0.3lf \n",simplex(m, n, a, b, c, x, y));
     /* ---------------------------- */
 
     /* Deallocating variables */
+    for(int i=0; i< m; i++){
+        free(a[i]); 
+    }
     free(a);
     free(b);
     free(c);
@@ -94,14 +97,13 @@ int main() {
     
     return 0;
 }
-
-
     
 void print(struct simplex_t* s) {
     printf("%14s = %10d\n%14s = %10d\n", "m", s->m, "n", s->n);
     printf("%14s = ", "max z");
     for (size_t i = 0; i < s->m; ++i)
     {
+       
         printf("%10.3lf*x_%d", s->c[i], i);
         if(i != s->m - 1){
             printf(" + ");
@@ -123,6 +125,31 @@ void print(struct simplex_t* s) {
     }
 }
 
+void prepare (struct simplex_t** s, int k) //Gissar på double
+{
+    int m = (*s)->m;
+    int n = (*s)->n;
+    int i;
+    // make room for xm+n at s.var[n] by moving s.var[n..n+m-1] one
+    // step to the right.
+    for (i = m + n; i > n; i--) {
+        (*s)->var[i] = (*s)->var[i-1];
+    }
+    (*s)->var[n]= m + n;
+    // add xm+n to each constraint
+    n = n+1;
+    for (i = 0; i < m; i = i +1) {
+        (*s)->a[i][n-1]  = -1;
+    }
+
+    (*s)->x = calloc(m+n, sizeof(double*)); // new double [m+ n];
+    (*s)->c = calloc(n, sizeof(double*)); //new double [n];
+
+    
+    (*s) -> c[n-1]= -1;
+    (*s) -> n = n;
+    pivot(s, k, n-1);
+}
 
 double simplex(int m, int n, double** a, double* b, double* c, double* x, double y) {
     return xsimplex(m, n, a, b, c, x, y, NULL, 0);
@@ -245,19 +272,19 @@ int initial(struct simplex_t** s, int m, int n, double** a, double* b, double* c
 
     k = init(s, m, n, a, b, c, x, y, var);
 
-    //assume b[k] >= 0.
-    return 1; //feasible.
+    if (b[k] >= 0) {
+        return 1; //feasible.
+    }
 
-    /*
     prepare(s,k);
-    n = s->n;
-    s->y = xsimplex(m,n, s->a, s->b, s->c, s->x, 0, s->var, 1);
+    n = (*s)->n;
+    (*s)->y = xsimplex(m,n, (*s)->a, (*s)->b, (*s)->c, (*s)->x, 0, (*s)->var, 1);
 
     for (i = 0; i < m+n; ++i) {
-        if (s->var[i] == m+n+1) {
-            if (fabs(s->x[i]) > epsilon) {
-                free(s->x);
-                free(s->c);
+        if ((*s)->var[i] == m+n+1) {
+            if (fabs((*s)->x[i]) > EPSILON) {
+                free((*s)->x);
+                free((*s)->c);
                 return 0; //infeasible.
             } else {
                 break;
@@ -265,74 +292,71 @@ int initial(struct simplex_t** s, int m, int n, double** a, double* b, double* c
         }
     }
 
-    if (i >= n) {
-        //x_{n+m} is basic. find good nonbasic.
-        for (j = k = 0; k < n; ++k) {
-            if (fabs(s->a[i - n][k]) > fabs(s->a[i - n][j])) {
-                j = k;
+    if(i >= n){ 
+        // xn+m is basic. ﬁnd good nonbasic.
+        for (j = k = 0; k < n; k = k + 1)
+            if (fabs((*s)->a[i - n][k]) > fabs((*s)->a[i - n][ j])) {
+                j=k;
+            }
+        pivot(s,i-n,j);
+        i=j;
+    }
+        
+    if(i < n-1) {
+        // xn+m is nonbasic and not last. swap columns i and n-1
+        k = (*s) -> var[i]; (*s)->var[i] = (*s)->var[n-1]; (*s) -> var[n-1] = k;
+        for (k = 0; k < m; k = k + 1) {
+            w = (*s)->a[k][n-1]; (*s) -> a[k][n-1] = (*s) -> a[k][i]; (*s) -> a[k][i] = w;
+        }
+    }
+    else {} // xn+m is nonbasic and last. forget it.
+        
+    free(c); //delete s.c
+    (*s)->c = c;
+    (*s)->y = y;
+    for (k = n-1; k < n+m-1; k = k + 1){
+        (*s)->var[k] = (*s)->var[k+1];
+    }
+    n = (*s)->n = (*s)->n - 1;
+
+    //double* t; //= new double [n]
+    //t = calloc(n, sizeof(double));
+    //double t[n];
+
+    for (k = 0; k < n; k = k + 1) {
+        for (j = 0; j < n; j = j + 1)
+            if (k = (*s)->var[j]){ 
+                // xk is nonbasic. add ck
+                t[j] = t[j] + (*s)->c[k];
+                goto next_k;
+            }
+
+
+        // xk is basic.
+        for (j = 0; j < m; j = j + 1) {
+            if ((*s)->var[n+j] = k) {
+                // xk is at row j
+                break;
             }
         }
-        pivot(s, i - n, j);
-        i = j;
-    }
-
-    if (i < n-1) {
-        //x_{n+m} is nonbasic and not last. swap columns i and n-1.
-        k = s->var[i];
-        s->var[i] = s->var[n-1];
-        s->var[i-1] = k;
-        for (k = 0; k < m; ++k) {
-            w = s->a[k][n-1];
-            s->a[k][n-1] = s->a[k][i];
-            s->a[k][i] = w;
-        }
-    } else {
-        //x_{n+m} is nonbasic and last. forget it.
-    }
-
-    free(s->c);
-    s->c = c;
-    s->y = y;
-
-    for (k = n-1; k < n+m-1; ++k) {
-        s->var[k] = s->var[k+1];
-    }
-
-    n = s->n = s->n - 1;
-    double t[n];
-
-    for (k = 0; k < n; ++k) {
-        for (j = 0; j < n; ++j) {
-           if (k == s->var[j]) {
-               //x_k is nonbasic. add c_k.
-               t[j] = t[j] + s->c[k];
-               goto next_k;
-           }
-        }
-        for (j = 0; j < m; ++j) {
-           if (s->var[n+j] == k) {
-               //x_k is at row j.
-               break;
-           }
+        (*s)->y = (*s)->y + (*s)->c[k] * (*s)->b[j];
+        for (i = 0; i < n; i = i + 1) {
+            t[i] = t[i] - (*s)->c[k] * (*s)->a[j][i];
         }
 
-        s->y = s->y + s->c[k] * s->b[j];
-
-        for (i = 0; i < n; ++i) {
-            t[i] = t[i] - s->c[k] * s->a[j][i];
-        }
-    next_k:;
+    next_k:
     }
 
-    for (i = 0; i < n; ++i) {
-        s->c[i] = t[i];
-    }
 
+
+    for (i = 0; i < n; i = i + 1) {
+        (*s)->c[i] = t[i];
+    }
+    //delete t and s.x
     free(t);
-    free(s->x);
+    free(x);
 
     return 1;
-    */
 }
 
 int select_nonbasic(struct simplex_t* s) {
@@ -360,7 +384,7 @@ int init(struct simplex_t** s, int m, int n, double** a, double* b, double* c, d
     (*s)->var = var;
 
     if ((*s)->var == NULL) {
-        (*s)->var = (int*)calloc(m + n + 1, sizeof(int));
+        (*s)->var = (int*)calloc(m + n + 1, sizeof(int)); 
         for (i = 0; i < m+n; ++i) {
             (*s)->var[i] = i;
         }
