@@ -58,6 +58,12 @@ int main(int argc, char** argv)
     /* ---------------------------- */
 
     /* Deallocating variables */
+    //free(m);
+    //free(n);
+    //a = calloc(m, sizeof(double*));
+    for(int i=0; i< m; i++){
+        free(a[i]); 
+    }
     free(a);
     free(b);
     free(c);
