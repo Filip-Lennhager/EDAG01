@@ -72,6 +72,8 @@ int main(int argc, char** argv)
 }
 
 int printInput(double** a, double* b, double*c, int m, int n){
+
+
     
     printf("Max Z = ");
     for(int i=0; i<n; i++){

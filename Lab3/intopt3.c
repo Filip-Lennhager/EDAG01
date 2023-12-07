@@ -31,6 +31,7 @@ int select_nonbasic(struct simplex_t* s);
 
 int init(struct simplex_t* s, int m, int n, double** a, double* b, double* c, double* x, double y, int* var);
 
+int testarr[2];
 
 int main() {
             
@@ -44,7 +45,14 @@ int main() {
     double* x;
     double y;
 
+
     scanf("%10d %10d", &m, &n);
+    
+    int	local_array[10];
+    testarr[4] = 3;
+
+    
+    
     
     /* ------Allocating------ */
     
@@ -114,7 +122,7 @@ void printInput(double** a, double* b, double*c, int m, int n){
     for(int i=0; i<m; i++){
         printf("\n");
         for(int j=0; j<n; j++){
-            printf("\t%+10.3lf", a[i][j]);
+           printf("\t%+10.3lf", a[i][j]);
         }
         printf("\t\u2264%+10.3lf", b[i]);
     }
@@ -137,8 +145,8 @@ void prepare (struct simplex_t* s, int k) {
         s->a[i][n-1]  = -1;
     }
 
-    s->x = calloc(m+n, sizeof(double*)); // new double [m+ n];
-    s->c = calloc(n, sizeof(double*)); //new double [n];
+    s->x = calloc(m+n, sizeof(double)); // new double [m+ n];
+    s->c = calloc(n, sizeof(double)); //new double [n];
 
     
     s -> c[n-1]= -1;
@@ -382,12 +390,16 @@ int init(struct simplex_t* s, int m, int n, double** a, double* b, double* c, do
     s->x = x;
     s->y = y;
     s->var = var;
-
+    
     if (s->var == NULL) {
         s->var = (int*)calloc(m + n + 1, sizeof(int));
+        //s->var = malloc(sizeof(int) * (m+n+1));
+
+        
         for (i = 0; i < m+n; ++i) {
             s->var[i] = i;
         }
+        
     }
 
     for (k = 0, i = 1; i < m; ++i) {
