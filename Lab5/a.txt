@@ -1,0 +1,114 @@
+fi4154le-s@power:~/lab5$ ./t a
+==47183== valgrind-itrace, Instruction and memory tracer.
+==47183== Copyright IBM (C) 2002-2016, and GNU GPL'd
+==47183== Using Valgrind-3.15.0.GIT and LibVEX; rerun with -h for copyright info
+==47183== Command: ./a.out
+==47183== 
+Finished collecting specified total number of instructions 1024 . . . Quitting.
+Created 1024 qt records
+
+[run_timer] - Licensed Materials - Property of IBM - Release p8.1
+[run_timer] - (c) Copyright IBM Corp. 1997, 2005
+[run_timer] - Command line arguments are ok.
+[run_timer] - WARNING: Output file '/home/fi4154le-s/lab5/a.results' exists and will be overwritten.
+[run_timer] - WARNING: Output file '/home/fi4154le-s/lab5/a.pipe' exists and will be overwritten.
+[run_timer] - Run settings:
+[run_timer] +----------- [MODE] -------------
+[run_timer] | Running in ST mode.
+[run_timer] +-------- [BEHAVIORAL] ----------
+[run_timer] | Branch Pred  = perfect
+[run_timer] | iL1 CACHE    = infinite
+[run_timer] | dL1 CACHE    = infinite
+[run_timer] | L1.5 CACHE   = infinite
+[run_timer] | L2 CACHE     = infinite
+[run_timer] | L3 MISS DLY  = 232
+[run_timer] | STORES       =  don't send to L2
+[run_timer] | TLBs         = infinite
+[run_timer] | Warm TLB     = enabled
+[run_timer] | TRANSLATE    = disabled
+[run_timer] | PAGE_SIZE    = small
+[run_timer] | DCBT(ST)     = 1
+[run_timer] | D_PREFETCH   = disabled
+[run_timer] | S_PREFETCH   = disabled
+[run_timer] | REAL ADDRESS = hashed effective address (EA)
+[run_timer] | INVALID OP   = turn to nop
+[run_timer] +------ [OUTPUT CONTROL]---------
+[run_timer] | OUTPUT DIR   = /home/fi4154le-s/lab5/
+[run_timer] | SCROLLING    = by cycle
+[run_timer] | START        = 1
+[run_timer] | END          = 2000
+[run_timer] | TYPE         = java
+[run_timer] | JAVAtoASCII  = disabled
+[run_timer] | AUTO_LOAD    = disabled
+[run_timer] | STORES       = scroll
+[run_timer] | CMPL_TRACE   = disabled
+[run_timer] +--------------------------------
+[run_timer] - Trace is ok.
+[run_timer] - All systems go, running timer.
+ received first 0 time 0.000000  setup argv inspect
+qtrace_argv[11]=-name
+ max_inst 1001 zero_count 1 
+ 0 0.010000 1 0.020000 
+[jtrace] - Set to turn undefined ops into NOPs.
+[jtrace] - run error limit set to 1.
+prefetch_ramp_cycles 1
+AS400 mode: tags inactive
+Java Scrolling Init - scroll on.
+ at1 SMT INSTANTIATE 
+ in1 SMT INSTANTIATE i 0 
+ set SMT INSTANTIATE i 0 
+ in0 SMT INSTANTIATE i 0 
+ past SMT INSTANTIATE 
+  SMT START stage i 0 
+  SMT STARTED stage i 0 
+  SMT START decod i 0 
+  SMT STARTED decod i 0 
+  SMT START fetch i 0 
+  SMT STARTED fetch i 0 
+  SMT START btcal i 0 
+  SMT STARTED btcal i 0 
+ elm 2 
+ received first 0 time 0.000000  next_cycle 
+[jtrace] - INFO: reading XER line XER 600 403 403 401 401 400 402 600 600 600
+[jtrace] - INFO: XER Map = 600 403 403 401 401 400 402 600 600 600
+[jtrace] - WARNING: Building SPR mapper,SPR IABR Unknown
+[jtrace] - INFO: Ignoring line END  last line
+[jtrace] - Calling READMAP for decode.map
+[jtrace] - Calling READTABLE for decode.map
+ grup 0 tr 0 
+ number in grup 0 1 
+ number in grup 1 0 
+ here i am the master decoder t 0.000000 
+ tr 0 tr_grup_num 0 t 1.000000 
+|---- M1 VERSION = 2626 ----|
+ init renames trace id 0 
+init gpr quads 0/1 1/41 2/82 3/0 4/0 5/0 
+init fpr quads 0/0 1/48 2/96 3/0 4/0 5/0 
+ init renames arch trace id 0 trace grup 0
+ arch inst 102  time 87.000000 
+ trace 0 completed arch 102 
+ arch inst 204  time 140.000000 
+ trace 0 completed arch 210 
+ arch inst 300  time 192.000000 
+ trace 0 completed arch 306 
+ arch inst 402  time 242.000000 
+ trace 0 completed arch 402 
+ arch inst 504  time 293.000000 
+ trace 0 completed arch 510 
+ arch inst 600  time 337.000000 
+ trace 0 completed arch 606 
+ arch inst 705  time 511.000000 
+ trace 0 completed arch 706 
+ arch inst 801  time 534.000000 
+ trace 0 completed arch 804 
+ arch inst 900  time 571.000000 
+ trace 0 completed arch 903 
+ arch inst 1002  time 654.000000 
+ trace 0 completed arch 1003 
+wg complete id 800002673 trace 0 gtag 242 at 683.000000
+Java Scrolling - scroll off time 684.000000.
+[run_timer] - Run completed, generating output files.
+[run_timer] - Generated 'a.results' and 'a.config' and 'a.pipe'.
+[run_timer] - Done.
+[run_timer] - Licensed Materials - Property of IBM - Release p8.1
+[run_timer] - (c) Copyright IBM Corp. 1997, 2005
