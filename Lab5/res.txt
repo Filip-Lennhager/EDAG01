@@ -1,0 +1,13 @@
+
+First load lfdx completed: 49 cycle
+
+First IoP ID lfdx: Iop ID 13
+As 1 iterations is 7 Mneonic operations and 100 iterations --> Last load operations should be: 13 + 7* 100 - 6 = 707 
+I.e -5 -1 for last add for loop
+Calclated Iop ID: 707
+Actual last load operations: Iop ID 707
+
+Clock cycle for last lfdx: 341
+
+--> (341-49)/100 = 2,92 cycles/iterations   
+Alltså sker instruktioner parallellt
