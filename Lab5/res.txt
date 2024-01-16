@@ -10,4 +10,18 @@ Actual last load operations: Iop ID 707
 Clock cycle for last lfdx: 341
 
 --> (341-49)/100 = 2,92 cycles/iterations   
-Alltså sker instruktioner parallellt
+Alltså sker instruktioner parallelltf
+
+
+
+
+
+b/
+first load lfdx completed: 51 cycle 
+first IoP ID lfdx: 17
+
+As 1 iteration is 7 Mneonic operation and 99 iterantions --> Last load operations should be 17 + 7 *99 -6 = 704
+Clock cycle for last: 654
+
+Rimligt då det är fler operation per iteration
+Cycled per iteration: (704-51)/99 = 6,6 cycler per iteration 

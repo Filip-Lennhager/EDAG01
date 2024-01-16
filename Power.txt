@@ -1,0 +1,2 @@
+Copy from power to local
+scp fi4154le-s@power.cs.lth.se:lab5/b.pipe /Users/filip/Documents/Programming/EDAG01/Lab5
