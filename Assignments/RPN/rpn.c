@@ -113,7 +113,13 @@ int main(int argc, char *argv[]) {
 
         if (isdigit(ch)) {
             ungetc(ch, fin);
-            fscanf(fin, "%d", &number);
+            int result = fscanf(fin, "%d", &number);
+            if (result != 1) {
+                // Handle the error appropriately
+                fprintf(fout, "line %d: error reading number\n", lineCount);
+                errorFlag = 1;
+                continue;
+            }
             push(number, fout, &errorFlag, lineCount);
         } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
             applyOperation(ch, fout, &errorFlag, lineCount);
