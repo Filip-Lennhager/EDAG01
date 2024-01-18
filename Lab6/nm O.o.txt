@@ -1,3 +1,8 @@
+T - Executable Code
+C - Common Symbol, or debugger symbol table entries
+G/D - Data Section Symbol, initialized data
+U - Undefined, undefined in this file
+
 fi4154le-s@power:~/lab6$ nm 0.o
                  U .TOC.
 00000000000031e8 T Bubble

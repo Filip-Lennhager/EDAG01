@@ -1,0 +1,8 @@
+fi4154le-s@power:~/lab6$ echo -n "clang: "; ./matmul.clang
+clang: T = 3.147 s
+fi4154le-s@power:~/lab6$ echo -n "gcc: "; ./matmul.gcc
+gcc: T = 1.339 s
+fi4154le-s@power:~/lab6$ echo -n "ibm: "; ./matmul.ibm
+ibm: T = 0.234 s
+fi4154le-s@power:~/lab6$ echo -n "nvidia: "; ./matmul.nvidia
+nvidia: T = 0.488 s

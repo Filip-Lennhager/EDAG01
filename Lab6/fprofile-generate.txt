@@ -1,0 +1,9 @@
+fi4154le-s@power:~/lab6$ ./a.out
+    Perm  Towers  Queens   Intmm      Mm  Puzzle   Quick  Bubble    Tree     FFT
+     221     265     768      45      54     710      46     275      73     152
+
+
+
+compered to 03:
+Perm  Towers  Queens   Intmm      Mm  Puzzle   Quick  Bubble    Tree     FFT
+ 221     323     733      60      58     985      45     466      73     154
