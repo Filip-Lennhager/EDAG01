@@ -8,13 +8,14 @@ int stack[STACK_SIZE];
 int top = -1;
 char lastChar; // Global variable to store the last character read
 
-void push(int number, FILE *fout, int *errorFlag, int lineCount) {
+int push(int number, FILE *fout, int *errorFlag, int lineCount) {
     if (top >= STACK_SIZE - 1) {
         fprintf(fout, "line %d: error at %c", lineCount, lastChar); // Error caused by lastChar
         *errorFlag = 1;
     } else {
         stack[++top] = number;
     }
+    return 0;
 }
 
 int pop(FILE *fout, int *errorFlag, int lineCount) {
@@ -26,17 +27,17 @@ int pop(FILE *fout, int *errorFlag, int lineCount) {
     return stack[top--];
 }
 
-void applyOperation(char operator, FILE *fout, int *errorFlag, int lineCount) {
+int applyOperation(char operator, FILE *fout, int *errorFlag, int lineCount) {
     if (top < 1) {
         fprintf(fout, "line %d: error at %c", lineCount, operator); // Not enough elements
         *errorFlag = 1;
-        return;
+        return 1;
     }
 
     int y = pop(fout, errorFlag, lineCount);
     int x = pop(fout, errorFlag, lineCount);
 
-    if (*errorFlag) return;
+    if (*errorFlag) return 1;
 
     switch(operator) {
         case '+': push(x + y, fout, errorFlag, lineCount); break;
@@ -46,7 +47,7 @@ void applyOperation(char operator, FILE *fout, int *errorFlag, int lineCount) {
             if (y == 0) {
                 fprintf(fout, "line %d: error at /", lineCount); // Divide by zero
                 *errorFlag = 1;
-                return;
+                 return 1;
             }
             push(x / y, fout, errorFlag, lineCount);
             break;
@@ -54,10 +55,12 @@ void applyOperation(char operator, FILE *fout, int *errorFlag, int lineCount) {
             fprintf(fout, "line %d: error at %c", lineCount, operator);
             *errorFlag = 1;
     }
+    return 0;
 }
 
-void resetStack(void) {
+int resetStack(void) {
     top = -1;
+    return 0;
 }
 
 int main(int argc, char *argv[]) {
