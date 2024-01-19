@@ -8,9 +8,9 @@ int stack[STACK_SIZE];
 int top = -1;
 char lastChar; // Global variable to store the last character read
 
-int push(int number, FILE *fout, int *errorFlag, int lineCount) {
+int push(int number, int *errorFlag, int lineCount) {
     if (top >= STACK_SIZE - 1) {
-        fprintf(fout, "line %d: error at %c", lineCount, lastChar); // Error caused by lastChar
+        printf("line %d: error at %c", lineCount, lastChar); // Error caused by lastChar
         *errorFlag = 1;
     } else {
         stack[++top] = number;
@@ -18,41 +18,41 @@ int push(int number, FILE *fout, int *errorFlag, int lineCount) {
     return 0;
 }
 
-int pop(FILE *fout, int *errorFlag, int lineCount) {
+int pop(int *errorFlag, int lineCount) {
     if (top < 0) {
-        fprintf(fout, "line %d: error at \\n", lineCount); // Stack underflow
+        printf("line %d: error at \\n", lineCount); // Stack underflow
         *errorFlag = 1;
         return 0;
     }
     return stack[top--];
 }
 
-int applyOperation(char operator, FILE *fout, int *errorFlag, int lineCount) {
+int applyOperation(char operator, int *errorFlag, int lineCount) {
     if (top < 1) {
-        fprintf(fout, "line %d: error at %c", lineCount, operator); // Not enough elements
+        printf("line %d: error at %c", lineCount, operator); // Not enough elements
         *errorFlag = 1;
         return 1;
     }
 
-    int y = pop(fout, errorFlag, lineCount);
-    int x = pop(fout, errorFlag, lineCount);
+    int y = pop(errorFlag, lineCount);
+    int x = pop(errorFlag, lineCount);
 
     if (*errorFlag) return 1;
 
     switch(operator) {
-        case '+': push(x + y, fout, errorFlag, lineCount); break;
-        case '-': push(x - y, fout, errorFlag, lineCount); break;
-        case '*': push(x * y, fout, errorFlag, lineCount); break;
+        case '+': push(x + y, errorFlag, lineCount); break;
+        case '-': push(x - y, errorFlag, lineCount); break;
+        case '*': push(x * y, errorFlag, lineCount); break;
         case '/':
             if (y == 0) {
-                fprintf(fout, "line %d: error at /", lineCount); // Divide by zero
+                printf("line %d: error at /", lineCount); // Divide by zero
                 *errorFlag = 1;
                  return 1;
             }
-            push(x / y, fout, errorFlag, lineCount);
+            push(x / y, errorFlag, lineCount);
             break;
         default:
-            fprintf(fout, "line %d: error at %c", lineCount, operator);
+            printf("line %d: error at %c", lineCount, operator);
             *errorFlag = 1;
     }
     return 0;
@@ -63,41 +63,28 @@ int resetStack(void) {
     return 0;
 }
 
-int main(int argc, char *argv[]) {
-    if (argc != 3) {
-        printf("Usage: %s <inputfile> <outputfile>\n", argv[0]);
-        return 1;
-    }
-
-    FILE *fin = fopen(argv[1], "r");
-    FILE *fout = fopen(argv[2], "w");
-
-    if (fin == NULL || fout == NULL) {
-        perror("Error opening file");
-        return 1;
-    }
-
+int main(void) {
     int ch, number, lineCount = 1, errorFlag = 0;
 
     while (1) {
-        ch = fgetc(fin);
+        ch = getchar();
         lastChar = ch;
 
         if (ch == EOF) {
-            if (!feof(fin)) { // Read error
-                fprintf(fout, "line %d: read error\n", lineCount);
+            if (!feof(stdin)) { // Read error
+                printf("line %d: read error\n", lineCount);
             }
             break;
         }
 
         if (ch == '\n') {
             if (errorFlag) {
-                fprintf(fout, "\n");
+                printf("\n");
                 errorFlag = 0;
             } else if (top == 0) {
-                fprintf(fout, "line %d: %d\n", lineCount, pop(fout, &errorFlag, lineCount));
+                printf("line %d: %d\n", lineCount, pop(&errorFlag, lineCount));
             } else {
-                fprintf(fout, "line %d: error at \\n\n", lineCount);
+                printf("line %d: error at \\n\n", lineCount);
             }
             lineCount++;
             resetStack();
@@ -106,7 +93,7 @@ int main(int argc, char *argv[]) {
 
         if (errorFlag) {
             if (ch == '\n') {
-                fprintf(fout, "\n");
+                printf("\n");
                 lineCount++;
                 errorFlag = 0;
                 resetStack();
@@ -115,24 +102,22 @@ int main(int argc, char *argv[]) {
         }
 
         if (isdigit(ch)) {
-            ungetc(ch, fin);
-            int result = fscanf(fin, "%d", &number);
+            ungetc(ch, stdin);
+            int result = scanf("%d", &number);
             if (result != 1) {
                 // Handle the error appropriately
-                fprintf(fout, "line %d: error reading number\n", lineCount);
+                printf("line %d: error reading number\n", lineCount);
                 errorFlag = 1;
                 continue;
             }
-            push(number, fout, &errorFlag, lineCount);
+            push(number, &errorFlag, lineCount);
         } else if (ch == '+' || ch == '-' || ch == '*' || ch == '/') {
-            applyOperation(ch, fout, &errorFlag, lineCount);
+            applyOperation(ch, &errorFlag, lineCount);
         } else if (!isspace(ch)) {
-            fprintf(fout, "line %d: error at %c", lineCount, ch);
+            printf("line %d: error at %c", lineCount, ch);
             errorFlag = 1;
         }
     }
 
-    fclose(fin);
-    fclose(fout);
     return 0;
 }

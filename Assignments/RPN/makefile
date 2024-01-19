@@ -4,7 +4,7 @@ OUT	= a.out
 FILE	= rpn
 
 execute: compile
-	./a.out input output
+	./a.out < input > output
 	diff output correct
 
 compile: clean $(FILE).o malloc.o
